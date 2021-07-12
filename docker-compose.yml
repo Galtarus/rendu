@@ -1,15 +1,26 @@
 version: "3"
 services:
   planner:
+    environment:
+        - TASKS=5
+
     build: ./planner
     ports:
     - 8080:8080
-    extra_hosts:
-      - host.docker.internal:host-gateway
+    depends_on:
+      - worker_mult 
+      - worker_add
 
-  worker:
+  worker_mult:
+      environment:
+        - MULT=true        
       build: ./worker
       ports:
-      - 3000:3000
-      extra_hosts:
-        - host.docker.internal:host-gateway
+        - "3000:3000"
+
+  worker_add:
+      environment:
+        - ADD=true
+      build: ./worker
+      ports:
+        - "3001:3001"
